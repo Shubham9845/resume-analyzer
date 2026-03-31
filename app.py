@@ -24,12 +24,13 @@ if not st.session_state.logged_in:
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
 
-    if st.button("Login"):
+    login_clicked = st.button("Login")
+
+    if login_clicked:
         if username in users and users[username] == password:
             st.session_state.logged_in = True
             st.session_state.user = username
             st.success("✅ Login successful")
-            st.rerun()
         else:
             st.error("❌ Invalid credentials")
 
