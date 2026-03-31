@@ -35,7 +35,14 @@ if not st.session_state.logged_in:
 
     st.stop()
 
-nlp = spacy.load("en_core_web_sm")
+import spacy
+import os
+
+try:
+    nlp = spacy.load("en_core_web_sm")
+except:
+    os.system("python -m spacy download en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 
 conn = sqlite3.connect("resume_data.db")
 c = conn.cursor()
