@@ -28,13 +28,9 @@ if not st.session_state.logged_in:
         if username in users and users[username] == password:
             st.session_state.logged_in = True
             st.session_state.user = username
-            st.success("✅ Login successful")
-            st.experimental_rerun()
         else:
             st.error("❌ Invalid credentials")
-
-    st.stop()
-
+            
 import spacy
 import os
 
@@ -69,16 +65,17 @@ def clean_nlp_text(text):
         if not token.is_stop and not token.is_punct
     ])
 
-st.sidebar.write(f"👤 Logged in as: {st.session_state.user}")
+if st.session_state.logged_in:
 
-if st.sidebar.button("Logout"):
-    st.session_state.logged_in = False
-    st.rerun()
+    st.sidebar.write(f"👤 Logged in as: {st.session_state.user}")
 
-st.markdown("""
-# 🚀 AI Resume Analyzer Pro
-### Smart ATS Scoring & Resume Insights
-""")
+    if st.sidebar.button("Logout"):
+        st.session_state.logged_in = False
+
+    st.markdown("""
+    # 🚀 AI Resume Analyzer Pro
+    ### Smart ATS Scoring & Resume Insights
+    """)
 
 uploaded_files = st.file_uploader(
     "Upload Resumes (Multiple Allowed)", 
@@ -86,7 +83,7 @@ uploaded_files = st.file_uploader(
     accept_multiple_files=True
 )
 
-st.markdown("---")   # spacing line (optional but nice)
+st.markdown("---")   
 
 job_desc = st.text_area("Paste Job Description")
 
