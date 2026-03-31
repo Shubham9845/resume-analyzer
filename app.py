@@ -32,16 +32,11 @@ if not st.session_state.logged_in:
             st.error("❌ Invalid credentials")
             
 import spacy
-import os
-
-import spacy
-from spacy.cli import download
 
 try:
     nlp = spacy.load("en_core_web_sm")
 except:
-    download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+    nlp = spacy.blank("en")
 
 conn = sqlite3.connect("resume_data.db")
 c = conn.cursor()
