@@ -15,6 +15,5 @@ A Streamlit-based web application that analyzes resumes and extracts useful insi
 
 ## ▶️ How to Run
 
-```bash
 pip install -r requirements.txt
 streamlit run app.py
