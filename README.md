@@ -1,17 +1,1 @@
 # Resume Analyzer
-
-A Python-based application that analyzes resumes and extracts useful insights.
-
-## Features
-- Upload and analyze resumes
-- Extract key information
-- Simple and fast processing
-
-## Tech Stack
-- Python
-- SQLite
-
-## How to Run
-
-pip install -r requirements.txt  
-python app.py
