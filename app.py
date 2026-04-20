@@ -1,3 +1,12 @@
+import subprocess
+import sys
+
+try:
+    nlp = spacy.load("en_core_web_sm")
+except:
+    subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+    nlp = spacy.load("en_core_web_sm")
+    
 import streamlit as st
 st.set_page_config(page_title="AI Resume Analyzer Pro", page_icon="🚀", layout="wide")
 
