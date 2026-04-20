@@ -41,12 +41,7 @@ def clean_nlp_text(text):
 def clean_filename(name):
     return name[:25] + "..." if len(name) > 25 else name
 
-# ---------------- UI ---------------- #
-st.sidebar.write(f"👤 Logged in as: {st.session_state.user}")
-
-if st.sidebar.button("Logout"):
-    st.session_state.logged_in = False
-    st.rerun()
+# ---------------- UI ---------------- #)
 
 st.title("🚀 AI Resume Analyzer Pro")
 st.write("Smart ATS Scoring with NLP + ML")
