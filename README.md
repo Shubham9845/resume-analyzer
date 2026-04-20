@@ -1,3 +1,5 @@
+## 🌐 Live Demo
+[Click here to try the app](https://resume-analyzer-pro-2026.streamlit.app/)
 # Resume Analyzer
 
 A Streamlit-based web application that analyzes resumes and extracts useful insights.
