@@ -1,17 +1,5 @@
-import subprocess
-import sys
-
-try:
-    nlp = spacy.load("en_core_web_sm")
-except:
-    subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
-    nlp = spacy.load("en_core_web_sm")
-    
 import streamlit as st
-st.set_page_config(page_title="AI Resume Analyzer Pro", page_icon="🚀", layout="wide")
-
 from PyPDF2 import PdfReader
-import spacy
 import sqlite3
 import matplotlib
 matplotlib.use("Agg")
@@ -22,11 +10,18 @@ import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# ---------------- NLP ---------------- #
-try:
-    nlp = spacy.load("en_core_web_sm")
-except:
-    nlp = spacy.blank("en")
+st.set_page_config(page_title="AI Resume Analyzer Pro", page_icon="🚀", layout="wide")
+
+# ---------------- NLP (no spacy needed) ---------------- #
+def clean_nlp_text(text):
+    text = text.lower()
+    text = re.sub(r'[^\w\s]', ' ', text)
+    stop_words = {"the","and","for","are","was","were","with","this","that","from",
+                  "have","has","had","not","but","what","all","been","they","will",
+                  "one","can","our","you","your","his","her","its","their","there",
+                  "when","which","who","how","any","more","also","into","than","then"}
+    words = [w for w in text.split() if len(w) > 2 and w not in stop_words]
+    return " ".join(words)
 
 # ---------------- DATABASE ---------------- #
 conn = sqlite3.connect("resume_data.db", check_same_thread=False)
@@ -52,19 +47,10 @@ def extract_text(pdf_file):
             text += t + " "
     return text
 
-def clean_nlp_text(text):
-    doc = nlp(text.lower())
-    return " ".join([
-        token.lemma_.lower()
-        for token in doc
-        if not token.is_stop and not token.is_punct and len(token.text) > 1
-    ])
-
 def clean_filename(name):
     return name[:30] + "..." if len(name) > 30 else name
 
 def detect_experience(text):
-    """Detect years of experience or internships mentioned."""
     text_lower = text.lower()
     score = 0
     patterns = [
@@ -85,7 +71,6 @@ def detect_experience(text):
     return score
 
 def detect_education(text):
-    """Detect education level."""
     text_lower = text.lower()
     if any(w in text_lower for w in ["ph.d", "phd", "doctorate"]):
         return 20
@@ -98,23 +83,19 @@ def detect_education(text):
     return 8
 
 def smart_skill_match(resume_text, skills):
-    """Smarter skill matching — handles variations and multi-word skills."""
     resume_lower = resume_text.lower()
     matched = []
     missing = []
     for skill in skills:
         skill_lower = skill.lower()
-        # exact match
         if skill_lower in resume_lower:
             matched.append(skill)
             continue
-        # handle variations: remove spaces/hyphens
         skill_compact = skill_lower.replace(" ", "").replace("-", "")
         resume_compact = resume_lower.replace(" ", "").replace("-", "")
         if skill_compact in resume_compact:
             matched.append(skill)
             continue
-        # partial word match for multi-word skills
         words = skill_lower.split()
         if len(words) > 1 and all(w in resume_lower for w in words):
             matched.append(skill)
