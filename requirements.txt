@@ -1,6 +1,5 @@
 streamlit
 PyPDF2
-spacy
 matplotlib
 pandas
 scikit-learn
